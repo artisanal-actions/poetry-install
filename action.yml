@@ -1,0 +1,51 @@
+name: "Artisanal Poetry Install"
+author: "Daniel Knell"
+description: "Install python dependencies with poetry"
+
+branding:
+  icon: "arrow-down-circle"
+  color: "purple"
+
+inputs:
+  version: 
+    description: "poetry version to install"
+    type: "string"
+    required: false
+    default: "1.2.0b2"
+
+  extras: 
+    description: "python extras to install"
+    type: "string"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: install poetry
+      run: curl -sSL https://install.python-poetry.org | python - --version "${{ inputs.version }}"
+      shell: bash
+
+    - name: update path
+      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      shell: bash
+  
+    - name: configure poetry
+      run: poetry config virtualenvs.in-project true
+      shell: bash
+
+    - name: set up cache
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ hashFiles('**/poetry.lock') }}-${{ inputs.extras }}
+      id: cache
+
+    - name: ensure cache is healthy
+      run: timeout 10s poetry run pip --version || rm -rf .venv
+      shell: bash
+      if: steps.cache.outputs.cache-hit == 'true'
+
+    - name: install dependencies
+      run: poetry install ${{ inputs.extras && format('--extras "{0}"', inputs.extras) }}
+      shell: bash
+      if: steps.cache.outputs.cache-hit != 'true'
