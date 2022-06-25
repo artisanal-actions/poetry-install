@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
-    - uses: artisinal-actions/install-poetry@v1
+    - uses: artisinal-actions/poetry-install@v1
     - run: poetry run pytest
 ```
 
@@ -45,7 +45,7 @@ jobs:
         python-version: "3.10"
 
     - name: install poetry
-      uses: artisanal-actions/install-poetry@v1
+      uses: artisanal-actions/poetry-install@v1
       with:
         version: "1.1"
         extras: "foo bar baz"
