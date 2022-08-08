@@ -48,4 +48,3 @@ runs:
     - name: install dependencies
       run: poetry install ${{ inputs.extras && format('--extras "{0}"', inputs.extras) }}
       shell: bash
-      if: steps.cache.outputs.cache-hit != 'true'
