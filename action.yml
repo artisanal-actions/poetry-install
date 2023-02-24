@@ -11,7 +11,6 @@ inputs:
     description: "poetry version to install"
     type: "string"
     required: false
-    default: "1.2.0b2"
 
   extras: 
     description: "python extras to install"
@@ -22,7 +21,7 @@ runs:
   using: "composite"
   steps:
     - name: install poetry
-      run: curl -sSL https://install.python-poetry.org | python - --version "${{ inputs.version }}"
+      run: curl -sSL https://install.python-poetry.org | python - ${{ inputs.version && format('--version "{0}"', inputs.version) }}
       shell: bash
 
     - name: update path
