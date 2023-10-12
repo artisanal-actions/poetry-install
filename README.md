@@ -49,19 +49,22 @@ jobs:
       with:
         version: "1.1"
         extras: "foo bar baz"
+        directory: "./app"
 
     - name: run tests
       run: poetry run pytest
+      working-directory: "./app"
 ```
 
 ## 🎓 Usage
 
 ### Inputs
 
-| name      | default   | description                         |
-| --------- | --------- | ----------------------------------- |
-| `version` | `1.2.0b2` | the poetry version to install / use |
-| `extras`  | -         | any package extras to install       |
+| name          | default  | description                          |
+| -------------| --------- | ------------------------------------ |
+| `version`    | `1.2.0b2` | the poetry version to install / use  |
+| `extras`     | -         | any package extras to install        |
+| `directory`  | `.`       | the working directory to install use |
 
 ## 📚 Help
 
