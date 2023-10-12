@@ -12,6 +12,12 @@ inputs:
     type: "string"
     required: false
 
+  directory:
+    description: "working directory of the project"
+    type: "string"
+    required: false
+    default: "."
+
   extras: 
     description: "python extras to install"
     type: "string"
@@ -35,15 +41,18 @@ runs:
     - name: set up cache
       uses: actions/cache@v3
       with:
-        path: .venv
-        key: venv-${{ hashFiles('**/poetry.lock') }}-${{ inputs.extras }}
+        path: ${{ inputs.directory }}/.venv
+        key: venv-${{ hashFiles('**/poetry.lock') }}-${{ inputs.extras }}-${{ inputs.directory }}
       id: cache
 
     - name: ensure cache is healthy
       run: timeout 10s poetry run pip --version || rm -rf .venv
       shell: bash
+      working-directory: ${{ inputs.directory }}
       if: steps.cache.outputs.cache-hit == 'true'
 
     - name: install dependencies
       run: poetry install ${{ inputs.extras && format('--extras "{0}"', inputs.extras) }}
       shell: bash
+      working-directory: ${{ inputs.directory }}
+
