@@ -39,7 +39,7 @@ runs:
       shell: bash
 
     - name: set up cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ inputs.directory }}/.venv
         key: venv-${{ hashFiles('**/poetry.lock') }}-${{ inputs.extras }}-${{ inputs.directory }}
